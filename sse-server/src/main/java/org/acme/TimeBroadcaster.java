@@ -28,12 +28,17 @@ public class TimeBroadcaster {
 	private SseBroadcaster sseBroadcaster;
 	private long lastEventId = 0;
 
+	/*
+	 * FIXME ### CANNOT INJECT (does work for reactive version) ###
+	 * FIXME ### IS CALLED TWICE (FOR ...ClientProxy AND ...Subclass) ###
+	 */
 	public TimeBroadcaster(/* @Context Sse sse */) {
 		LOG.info("#init {}", this);
 //		setSse(sse);
 		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::broadcast, 1, 1, TimeUnit.SECONDS);
 	}
 
+	/* FIXME ### HAVE BEEN UNABLE TO GET A SENSIBLE LIFECYCLE WORKING. ### */
 	@Context
 	public void setSse(Sse sse) {
 		LOG.info("#setSse {}", this);
@@ -57,7 +62,8 @@ public class TimeBroadcaster {
 			sseBroadcaster.broadcast(eventBuilder.name("time").id(Long.toString(lastEventId++))
 					.mediaType(MediaType.TEXT_PLAIN_TYPE).data(Instant.now().toString()).build());
 		} catch (Exception e) {
-			LOG.warn("{}", e.getMessage());
+			/* FIXME ### HITS THIS DUE TO SECOND CLASS INSTANCE WITH NO SSE CONTEXT. ### */
+			LOG.warn("#broadcast {}", e.getMessage());
 		}
 	}
 
@@ -65,6 +71,7 @@ public class TimeBroadcaster {
 		LOG.info("#onClose {}", sseEventSink.hashCode());
 	}
 
+	/* FIXME ### GETS CALLED (TWICE) WHEN CLIENT HAS SIMPLY CLOSED CLEANLY ### */
 	private void onError(SseEventSink sseEventSink, Throwable t) {
 		LOG.info("#onError {}", sseEventSink.hashCode(), t);
 	}
