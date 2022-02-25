@@ -4,7 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-/*  FIXME ### THE SSE CLIENT DOES NOT WORK PROPERLY IF WE DON'T HAVE THIS. ### */
+/* FIXME ### THE SSE CLIENT DOES NOT WORK PROPERLY IF WE DON'T HAVE THIS. ### */
 public interface Dummy {
 
 	@GET
