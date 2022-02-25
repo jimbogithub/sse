@@ -28,18 +28,20 @@ public class TimeBroadcaster {
 	private SseBroadcaster sseBroadcaster;
 	private long lastEventId = 0;
 
-	public TimeBroadcaster(@Context Sse sse) {
+	public TimeBroadcaster(/* @Context Sse sse */) {
 		LOG.info("#init {}", this);
+//		setSse(sse);
+		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::broadcast, 1, 1, TimeUnit.SECONDS);
+	}
+
+	@Context
+	public void setSse(Sse sse) {
+		LOG.info("#setSse {}", this);
 
 		eventBuilder = sse.newEventBuilder();
 		sseBroadcaster = sse.newBroadcaster();
 		sseBroadcaster.onClose(this::onClose);
-
-		/*- If this is enabled we see errors when the client closes.  Is that actually desirable when they've simply gone away?
 		sseBroadcaster.onError(this::onError);
-		*/
-
-		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::broadcast, 1, 1, TimeUnit.SECONDS);
 	}
 
 	@GET
