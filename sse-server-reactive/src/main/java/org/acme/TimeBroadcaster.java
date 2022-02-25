@@ -48,6 +48,7 @@ public class TimeBroadcaster {
 		sseBroadcaster.register(sseEventSink);
 	}
 
+	/* FIXME ### TRIES TO SEND TO ALREADY CLOSED SINKS ### */
 	private void broadcast() {
 		try {
 			sseBroadcaster.broadcast(eventBuilder.name("time").id(Long.toString(lastEventId++))
@@ -57,6 +58,7 @@ public class TimeBroadcaster {
 		}
 	}
 
+	/* FIXME ### NEVER GETS CALLED ### */
 	private void onClose(SseEventSink sseEventSink) {
 		LOG.info("#onClose {}", sseEventSink.hashCode());
 	}
