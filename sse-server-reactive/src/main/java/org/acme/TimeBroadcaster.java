@@ -28,16 +28,14 @@ public class TimeBroadcaster {
 	private SseBroadcaster sseBroadcaster;
 	private long lastEventId = 0;
 
+	/* This does work for reactive. */
 	public TimeBroadcaster(@Context Sse sse) {
 		LOG.info("#init {}", this);
 
 		eventBuilder = sse.newEventBuilder();
 		sseBroadcaster = sse.newBroadcaster();
 		sseBroadcaster.onClose(this::onClose);
-
-		/*- If this is enabled we see errors when the client closes.  Is that actually desirable when they've simply gone away?
 		sseBroadcaster.onError(this::onError);
-		*/
 
 		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::broadcast, 1, 1, TimeUnit.SECONDS);
 	}
