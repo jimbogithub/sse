@@ -1,10 +1,17 @@
 package org.acme;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Priority;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.sse.InboundSseEvent;
 import javax.ws.rs.sse.SseEventSource;
@@ -28,7 +35,8 @@ public class TimeConsumer implements QuarkusApplication {
 
 	@Override
 	public int run(String... args) throws Exception {
-		Client client = ClientBuilder.newClient();
+		Client client = ClientBuilder.newBuilder().register(new ClientRequestLogger())
+				.register(new ClientResponseLogger()).build();
 		WebTarget target = client.target("http://localhost:" + port + "/time/subscribe");
 		try (SseEventSource source = SseEventSource.target(target).build()) {
 			source.register(this::onEvent, this::onError, this::onComplete);
@@ -49,6 +57,33 @@ public class TimeConsumer implements QuarkusApplication {
 
 	private void onComplete() {
 		LOG.info("#onComplete");
+	}
+
+	@Priority(Priorities.USER)
+	static final class ClientRequestLogger implements ClientRequestFilter {
+
+		private static final Logger LOG = LoggerFactory.getLogger(ClientRequestLogger.class);
+
+		@Override
+		public void filter(ClientRequestContext requestContext) throws IOException {
+			LOG.info("path={} method={} headers={}", requestContext.getUri().toURL(), requestContext.getMethod(),
+					requestContext.getHeaders());
+		}
+
+	}
+
+	@Priority(Priorities.USER)
+	static final class ClientResponseLogger implements ClientResponseFilter {
+
+		private static final Logger LOG = LoggerFactory.getLogger(ClientResponseLogger.class);
+
+		@Override
+		public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext)
+				throws IOException {
+			LOG.info("path={} status={} headers={}", requestContext.getUri().getPath(), responseContext.getStatusInfo(),
+					responseContext.getHeaders());
+		}
+
 	}
 
 }
