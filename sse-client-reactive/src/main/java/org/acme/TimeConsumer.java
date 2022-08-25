@@ -2,7 +2,6 @@ package org.acme;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -48,14 +47,14 @@ public class TimeConsumer implements QuarkusApplication {
 		try (SseEventSource source = SseEventSource.target(target).build()) {
 			source.register(this::onEvent, this::onError, this::onComplete);
 			source.open();
-			latch.await(20, TimeUnit.SECONDS);
+			latch.await();
 		}
 		return 0;
 	}
 
 	private void onEvent(InboundSseEvent event) {
-		LOG.info(event.readData());
-		latch.countDown();
+		LOG.info(event.readData(Event.class).message().substring(0, 20) + "...");
+//		latch.countDown();
 	}
 
 	private void onError(Throwable t) {
@@ -64,6 +63,9 @@ public class TimeConsumer implements QuarkusApplication {
 
 	private void onComplete() {
 		LOG.info("#onComplete");
+	}
+
+	record Event (String message) {
 	}
 
 	@Priority(Priorities.USER)
