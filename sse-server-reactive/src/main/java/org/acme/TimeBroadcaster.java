@@ -37,7 +37,8 @@ public class TimeBroadcaster {
 		sseBroadcaster.onClose(this::onClose);
 		sseBroadcaster.onError(this::onError);
 
-		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::broadcast, 1, 1, TimeUnit.SECONDS);
+		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::broadcast, 10, 10,
+				TimeUnit.MILLISECONDS);
 	}
 
 	@GET
@@ -52,7 +53,42 @@ public class TimeBroadcaster {
 	private void broadcast() {
 		try {
 			sseBroadcaster.broadcast(eventBuilder.name("time").id(Long.toString(lastEventId++))
-					.mediaType(MediaType.TEXT_PLAIN_TYPE).data(Instant.now().toString()).build());
+					.mediaType(MediaType.APPLICATION_JSON_TYPE)
+					.data("{\"message\":"
+							+ "\"sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd"
+							+ "sdkjninsaingineqiehifuhqefnqeriuhiruhifuisdhfihfiifnidsfgibdfibfdiubdfibdfsiufbifd\"}")
+					.build());
 		} catch (Exception e) {
 			LOG.warn("{}", e.getMessage());
 		}
